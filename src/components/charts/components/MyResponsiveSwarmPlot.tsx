@@ -10,7 +10,6 @@ const MyResponsiveSwarmPlot = ({ color }: { color: string | null }) => (
             data={MyResponsiveSwarmPlotData}
             groups={['group A', 'group B', 'group C']}
             theme={customTheme}
-            identity="id"
             value="price"
             colors={{ scheme: (color === null ? "nivo" : color as ColorSchemeId) }}
 
@@ -44,7 +43,6 @@ const MyResponsiveSwarmPlot = ({ color }: { color: string | null }) => (
             }}
             margin={{ top: 80, right: 100, bottom: 80, left: 100 }}
             axisTop={{
-                orient: 'top',
                 tickSize: 10,
                 tickPadding: 5,
                 tickRotation: 0,
@@ -54,7 +52,6 @@ const MyResponsiveSwarmPlot = ({ color }: { color: string | null }) => (
                 truncateTickAt: 0
             }}
             axisRight={{
-                orient: 'right',
                 tickSize: 10,
                 tickPadding: 5,
                 tickRotation: 0,
@@ -64,7 +61,6 @@ const MyResponsiveSwarmPlot = ({ color }: { color: string | null }) => (
                 truncateTickAt: 0
             }}
             axisBottom={{
-                orient: 'bottom',
                 tickSize: 10,
                 tickPadding: 5,
                 tickRotation: 0,
@@ -74,7 +70,6 @@ const MyResponsiveSwarmPlot = ({ color }: { color: string | null }) => (
                 truncateTickAt: 0
             }}
             axisLeft={{
-                orient: 'left',
                 tickSize: 10,
                 tickPadding: 5,
                 tickRotation: 0,

@@ -1,3 +1,5 @@
+import type { CalendarDatum } from "@nivo/calendar"
+
 export const MyBarChartData = [
     {
         "country": "AD",
@@ -134,14 +136,14 @@ export const MyResponsiveCirclePacking = {
 
 const startDate = new Date("2015-01-01");
 
-const MyResponsiveCalendar = [];
+const MyResponsiveCalendar: CalendarDatum[] = [];
 
 let dayCounter = 0;
 
 for (const entry of MyBarChartData) {
     const { country, ...foods } = entry;
 
-    for (const [food, value] of Object.entries(foods)) {
+    for (const [, value] of Object.entries(foods)) {
         const date = new Date(startDate);
         date.setDate(startDate.getDate() + dayCounter);
         const isoDate = date.toISOString().split("T")[0]; // format: YYYY-MM-DD
@@ -247,7 +249,7 @@ export const MyResponsiveSwarmPlot = MyBarChartData.flatMap(entry =>
             id: key,
             group: entry.country,
             price: value,
-            volume: value / 2 // or Math.random() * 100 for different visuals
+            volume: Number(value) / 2 // or Math.random() * 100 for different visuals
         }))
 );
 
