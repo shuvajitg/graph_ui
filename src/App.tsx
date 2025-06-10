@@ -1,11 +1,11 @@
-import Index from "./components/Index"
+import GraphList from "./components/charts/GraphList"
 
 
 function App() {
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <Index />
+    <div className="mx-36 mt-20">
+      <GraphList />
     </div>
   )
 }
