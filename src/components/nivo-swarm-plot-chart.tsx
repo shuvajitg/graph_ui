@@ -1,7 +1,16 @@
 import { ResponsiveSwarmPlot } from "@nivo/swarmplot"
 
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
+
 interface NivoSwarmPlotChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
@@ -28,7 +37,7 @@ export function NivoSwarmPlotChart({ data, xKey, yKey }: NivoSwarmPlotChartProps
             volume: Math.random() * 20 + 5,
         }))
 
-        const groups = [...new Set(transformedData.map((d) => d.group))].filter(Boolean)
+        const groups = [...new Set(transformedData.map((d) => d.group))].filter(Boolean).map(String)
 
         if (groups.length === 0) {
             return <div className="flex items-center justify-center h-full text-gray-500">No valid groups for swarm plot</div>
@@ -38,7 +47,6 @@ export function NivoSwarmPlotChart({ data, xKey, yKey }: NivoSwarmPlotChartProps
             <ResponsiveSwarmPlot
                 data={transformedData}
                 groups={groups}
-                identity="id"
                 value="value"
                 valueFormat="$.2f"
                 valueScale={{ type: "linear", min: "auto", max: "auto", reverse: false }}

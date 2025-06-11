@@ -1,12 +1,21 @@
 import { ResponsiveCirclePacking } from "@nivo/circle-packing"
 
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
+
 interface NivoCirclePackingChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
 
-export function NivoCirclePackingChart({ data, xKey, yKey }: NivoCirclePackingChartProps) {
+export function NivoCirclePackingChart({ data, yKey }: NivoCirclePackingChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }
@@ -23,24 +32,33 @@ export function NivoCirclePackingChart({ data, xKey, yKey }: NivoCirclePackingCh
 
         const transformedData = {
             name: "root",
-            children: validData.reduce((acc: any[], item) => {
-                const category = item.category || "Unknown"
-                let categoryGroup = acc.find((group) => group && group.name === category)
+            children: validData.reduce(
+                (
+                    acc: { name: string; children: { name: string; value: number }[] }[],
+                    item
+                ) => {
+                    const category = item.category || "Unknown"
+                    let categoryGroup = acc.find((group) => group && group.name === category)
 
-                if (!categoryGroup) {
-                    categoryGroup = { name: category, children: [] }
-                    acc.push(categoryGroup)
-                }
+                    if (!categoryGroup) {
+                        categoryGroup = { name: category, children: [] }
+                        acc.push(categoryGroup)
+                    }
 
-                if (categoryGroup.children) {
-                    categoryGroup.children.push({
-                        name: `${item.region || "Unknown"}-${item.month || "Unknown"}`,
-                        value: typeof item[yKey || "sales"] === "number" ? item[yKey || "sales"] : Math.random() * 1000,
-                    })
-                }
+                    if (categoryGroup.children) {
+                        categoryGroup.children.push({
+                            name: `${item.region || "Unknown"}-${item.month || "Unknown"}`,
+                            value:
+                                typeof item[yKey || "sales"] === "number"
+                                    ? (item[yKey || "sales"] as number)
+                                    : Number(item[yKey || "sales"]) || Math.random() * 1000,
+                        })
+                    }
 
-                return acc
-            }, []),
+                    return acc
+                },
+                []
+            ),
         }
 
         if (!transformedData.children || transformedData.children.length === 0) {

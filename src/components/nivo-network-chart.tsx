@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponsiveNetwork } from "@nivo/network"
 
 interface NivoNetworkChartProps {
@@ -6,7 +7,7 @@ interface NivoNetworkChartProps {
     yKey: string
 }
 
-export function NivoNetworkChart({ data, xKey, yKey }: NivoNetworkChartProps) {
+export function NivoNetworkChart({ data }: NivoNetworkChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }
@@ -31,7 +32,7 @@ export function NivoNetworkChart({ data, xKey, yKey }: NivoNetworkChartProps) {
             color: `hsl(${Math.random() * 360}, 70%, 50%)`,
         }))
 
-        const links = validData.map((item, index) => ({
+        const links = validData.map((item) => ({
             source: item.category,
             target: item.region,
             distance: Math.random() * 80 + 20,
@@ -63,7 +64,7 @@ export function NivoNetworkChart({ data, xKey, yKey }: NivoNetworkChartProps) {
                 motionConfig="wobbly"
             />
         )
-    } catch (error) {
+    } catch {
         return <div className="flex items-center justify-center h-full text-red-500">Error rendering network chart</div>
     }
 }

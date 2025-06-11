@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react"
 
 import { useState } from "react"
@@ -43,6 +41,7 @@ import { NivoTreeChart } from "./components/nivo-tree-chart"
 import { NivoTreeMapChart } from "./components/nivo-treemap-chart"
 import { NivoWaffleChart } from "./components/nivo-waffle-chart"
 import { NivoRadarChart } from "./components/nivo-radar-chart"
+import GraphList from "./components/GraphList"
 
 // Enhanced sample data with more variety
 const sampleData = [
@@ -180,7 +179,7 @@ const sampleData = [
   },
 ]
 
-type ChartType =
+export type ChartType =
   | "bar"
   | "pie"
   | "line"
@@ -273,7 +272,7 @@ export default function DataVisualizationDashboard() {
         "swarm-plot",
       ]
       const chartsRequiringOneAxis = ["pie", "treemap", "waffle", "calendar"]
-      const chartsRequiringNoAxes = ["chord", "circle-packing", "network", "tree", "radar"]
+      // const chartsRequiringNoAxes = ["chord", "circle-packing", "network", "tree", "radar"]
 
       if (chartsRequiringBothAxes.includes(selectedChartType) && (!xAxis || !yAxis)) {
         return (
@@ -366,22 +365,91 @@ export default function DataVisualizationDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div className="text-center">
+      <div className="w-full mx-auto space-y-6">
+        {/* <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Advanced Data Visualization Dashboard</h1>
           <p className="text-gray-600">
             Drag and drop columns to create interactive charts with 16 different visualization types
           </p>
+        </div> */}
+
+        <div className="">
+
+
+          {/* Axis Configuration */}
+          <Card className="">
+            <CardHeader>
+              <CardTitle className="text-lg">Chart Configuration</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* X-Axis Drop Zone */}
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 mb-2 block w-20">X-Axis</label>
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDropOnXAxis}
+                  className={`p-4 w-full border-2 border-dashed rounded-lg min-h-[20px] flex items-center justify-center transition-colors ${xAxis ? "border-green-300 bg-green-50" : "border-gray-300 bg-gray-50 hover:border-gray-400"
+                    }`}
+                >
+                  {xAxis ? (
+                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      {xAxis}
+                    </Badge>
+                  ) : (
+                    <span className="text-gray-500 text-sm">Drop column here</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Y-Axis Drop Zone */}
+              <div className="flex items-center">
+                <label className="text-sm font-medium text-gray-700 mb-2 block w-20">Y-Axis</label>
+                <div
+                  onDragOver={handleDragOver}
+                  onDrop={handleDropOnYAxis}
+                  className={`p-4 w-full border-2 border-dashed rounded-lg min-h-[20px] flex items-center justify-center transition-colors ${yAxis ? "border-green-300 bg-green-50" : "border-gray-300 bg-gray-50 hover:border-gray-400"
+                    }`}
+                >
+                  {yAxis ? (
+                    <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      {yAxis}
+                    </Badge>
+                  ) : (
+                    <span className="text-gray-500 text-sm">Drop column here</span>
+                  )}
+                </div>
+              </div>
+              <div className="justify-end flex gap-6">
+                <Button
+                  onClick={() => {
+                    setXAxis("")
+                    setYAxis("")
+                  }}
+                  variant="outline"
+                  className=""
+                >
+                  Clear Selection
+                </Button>
+
+                <GraphList chartTypes={chartTypes} selectedChartType={selectedChartType} setSelectedChartType={setSelectedChartType} />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Chart Types */}
+
+
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        {/* Chart Display */}
+        <div className="flex gap-6">
           {/* Data Columns */}
-          <Card>
+          <Card className="w-72">
             <CardHeader>
               <CardTitle className="text-lg">Data Columns</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
+              <div className="space-y-2 max-h-96 w-auto overflow-y-auto">
                 {columns && columns.length > 0 ? (
                   columns.map((column) => (
                     <div
@@ -399,96 +467,26 @@ export default function DataVisualizationDashboard() {
               </div>
             </CardContent>
           </Card>
-
-          {/* Axis Configuration */}
-          <Card>
+          <Card className="w-full">
             <CardHeader>
-              <CardTitle className="text-lg">Chart Configuration</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* X-Axis Drop Zone */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">X-Axis</label>
-                <div
-                  onDragOver={handleDragOver}
-                  onDrop={handleDropOnXAxis}
-                  className={`p-4 border-2 border-dashed rounded-lg min-h-[60px] flex items-center justify-center transition-colors ${xAxis ? "border-green-300 bg-green-50" : "border-gray-300 bg-gray-50 hover:border-gray-400"
-                    }`}
-                >
-                  {xAxis ? (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      {xAxis}
-                    </Badge>
-                  ) : (
-                    <span className="text-gray-500 text-sm">Drop column here</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Y-Axis Drop Zone */}
-              <div>
-                <label className="text-sm font-medium text-gray-700 mb-2 block">Y-Axis</label>
-                <div
-                  onDragOver={handleDragOver}
-                  onDrop={handleDropOnYAxis}
-                  className={`p-4 border-2 border-dashed rounded-lg min-h-[60px] flex items-center justify-center transition-colors ${yAxis ? "border-green-300 bg-green-50" : "border-gray-300 bg-gray-50 hover:border-gray-400"
-                    }`}
-                >
-                  {yAxis ? (
-                    <Badge variant="secondary" className="bg-green-100 text-green-800">
-                      {yAxis}
-                    </Badge>
-                  ) : (
-                    <span className="text-gray-500 text-sm">Drop column here</span>
-                  )}
-                </div>
-              </div>
-
-              <Button
-                onClick={() => {
-                  setXAxis("")
-                  setYAxis("")
-                }}
-                variant="outline"
-                className="w-full"
-              >
-                Clear Selection
-              </Button>
-            </CardContent>
-          </Card>
-
-          {/* Chart Types */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Chart Types</CardTitle>
+              <CardTitle className="text-xl">
+                {selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1).replace("-", " ")} Chart
+                {xAxis && yAxis && (
+                  <span className="text-sm font-normal text-gray-600 ml-2">
+                    ({xAxis} vs {yAxis})
+                  </span>
+                )}
+                {(xAxis || yAxis) && !(xAxis && yAxis) && (
+                  <span className="text-sm font-normal text-gray-600 ml-2">({xAxis || yAxis})</span>
+                )}
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 max-h-96 overflow-y-auto">
-                {chartTypes && chartTypes.length > 0 ? (
-                  chartTypes.map((chart) => {
-                    const Icon = chart.icon
-                    return (
-                      <Button
-                        key={chart.id}
-                        onClick={() => setSelectedChartType(chart.id as ChartType)}
-                        variant={selectedChartType === chart.id ? "default" : "outline"}
-                        className="w-full justify-start text-sm"
-                        size="sm"
-                      >
-                        <Icon className="h-4 w-4 mr-2" />
-                        {chart.name}
-                      </Button>
-                    )
-                  })
-                ) : (
-                  <div className="text-gray-500 text-sm">No chart types available</div>
-                )}
-              </div>
+              <div className="h-96">{renderChart()}</div>
             </CardContent>
           </Card>
-
           {/* Data Preview */}
-          <Card>
+          <Card className="w-80">
             <CardHeader>
               <CardTitle className="text-lg">Data Preview</CardTitle>
             </CardHeader>
@@ -514,34 +512,14 @@ export default function DataVisualizationDashboard() {
                   ) : (
                     <div className="text-gray-500 text-sm">No data available</div>
                   )}
-                  {sampleData && sampleData.length > 0 && (
+                  {/* {sampleData && sampleData.length > 0 && (
                     <p className="text-xs text-gray-500 text-center">Showing 3 of {sampleData.length} rows</p>
-                  )}
+                  )} */}
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
-
-        {/* Chart Display */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-xl">
-              {selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1).replace("-", " ")} Chart
-              {xAxis && yAxis && (
-                <span className="text-sm font-normal text-gray-600 ml-2">
-                  ({xAxis} vs {yAxis})
-                </span>
-              )}
-              {(xAxis || yAxis) && !(xAxis && yAxis) && (
-                <span className="text-sm font-normal text-gray-600 ml-2">({xAxis || yAxis})</span>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-96">{renderChart()}</div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   )

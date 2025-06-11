@@ -1,7 +1,15 @@
 import { ResponsiveHeatMap } from "@nivo/heatmap"
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
 
 interface NivoHeatMapChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
@@ -14,41 +22,29 @@ export function NivoHeatMapChart({ data, xKey, yKey }: NivoHeatMapChartProps) {
     }
 
     // Transform data for heatmap
-    const xValues = [...new Set(data.map((item) => item[xKey]))]
-    const yValues = [...new Set(data.map((item) => item[yKey]))]
+    const xValues = [...new Set(data.map((item) => String(item[xKey])))]
+    const yValues = [...new Set(data.map((item) => String(item[yKey])))]
 
+    // Nivo expects: [{ id: xVal, data: [{ x: yVal, y: value }, ...] }, ...]
     const heatmapData = xValues.map((xVal) => {
-        const row: any = { id: xVal }
-        yValues.forEach((yVal) => {
-            const matchingItems = data.filter((item) => item[xKey] === xVal && item[yKey] === yVal)
-            row[yVal] =
+        const rowData = yValues.map((yVal) => {
+            const matchingItems = data.filter((item) => String(item[xKey]) === xVal && String(item[yKey]) === yVal)
+            const value =
                 matchingItems.length > 0
                     ? matchingItems.reduce((sum, item) => sum + (item.sales || 0), 0) / matchingItems.length
                     : 0
+            return { x: yVal, y: value }
         })
-        return row
+        return { id: xVal, data: rowData }
     })
 
     return (
         <ResponsiveHeatMap
             data={heatmapData}
-            keys={yValues}
-            indexBy="id"
+            key={yValues.join(",")}
             margin={{ top: 60, right: 90, bottom: 60, left: 90 }}
-            cellOpacity={1}
-            cellBorderColor={{ from: "color", modifiers: [["darker", 0.8]] }}
+            borderColor={{ from: "color", modifiers: [["darker", 0.8]] }}
             labelTextColor={{ from: "color", modifiers: [["darker", 1.8]] }}
-            defs={[
-                {
-                    id: "lines",
-                    type: "patternLines",
-                    background: "inherit",
-                    color: "rgba(0, 0, 0, 0.1)",
-                    rotation: -45,
-                    lineWidth: 4,
-                    spacing: 7,
-                },
-            ]}
             colors={{
                 type: "diverging",
                 scheme: "red_yellow_blue",

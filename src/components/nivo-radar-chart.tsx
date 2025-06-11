@@ -15,7 +15,7 @@ interface NivoRadarChartProps {
     yKey: string
 }
 
-export function NivoRadarChart({ data, xKey, yKey }: NivoRadarChartProps) {
+export function NivoRadarChart({ data }: NivoRadarChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }

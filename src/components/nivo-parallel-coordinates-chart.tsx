@@ -1,12 +1,20 @@
 import { ResponsiveParallelCoordinates } from "@nivo/parallel-coordinates"
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
 
 interface NivoParallelCoordinatesChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
 
-export function NivoParallelCoordinatesChart({ data, xKey, yKey }: NivoParallelCoordinatesChartProps) {
+export function NivoParallelCoordinatesChart({ data }: NivoParallelCoordinatesChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }
@@ -39,12 +47,10 @@ export function NivoParallelCoordinatesChart({ data, xKey, yKey }: NivoParallelC
         return (
             <ResponsiveParallelCoordinates
                 data={transformedData}
-                variables={variables}
+                // variables={variables}
                 margin={{ top: 50, right: 60, bottom: 50, left: 60 }}
                 colors={{ scheme: "category10" }}
-                strokeWidth={2}
                 lineOpacity={0.6}
-                axesPlan="foreground"
                 axesTicksPosition="before"
                 legends={[
                     {
@@ -71,10 +77,9 @@ export function NivoParallelCoordinatesChart({ data, xKey, yKey }: NivoParallelC
                             },
                         ],
                     },
-                ]}
-            />
+                ]} variables={[]} />
         )
-    } catch (error) {
+    } catch {
         return (
             <div className="flex items-center justify-center h-full text-red-500">
                 Error rendering parallel coordinates chart

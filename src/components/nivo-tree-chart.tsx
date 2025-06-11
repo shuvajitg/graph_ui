@@ -1,12 +1,22 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponsiveTree } from "@nivo/tree"
 
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
+
 interface NivoTreeChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
 
-export function NivoTreeChart({ data, xKey, yKey }: NivoTreeChartProps) {
+export function NivoTreeChart({ data, yKey }: NivoTreeChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }

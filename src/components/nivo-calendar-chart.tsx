@@ -1,4 +1,6 @@
 import { ResponsiveCalendar, } from "@nivo/calendar"
+import type { CalendarDatum } from "@nivo/calendar"
+
 
 interface RadarChartDataItem {
     category: string
@@ -22,11 +24,13 @@ export function NivoCalendarChart({ data, xKey, yKey }: NivoCalendarChartProps) 
 
     try {
         // Transform data for calendar chart
-        const calendarData = data
+        const calendarData: CalendarDatum[] = data
             .filter((item) => item && (item.date || item[xKey] || item[yKey]))
             .map((item, index) => ({
-                day: item.date || `2024-01-${String((index % 30) + 1).padStart(2, "0")}`,
-                value: typeof item[yKey || xKey] === "number" ? item[yKey || xKey] : Math.random() * 100,
+                day: String(item.date || `2024-01-${String((index % 30) + 1).padStart(2, "0")}`),
+                value: typeof item[yKey || xKey] === "number"
+                    ? (item[yKey || xKey] as number)
+                    : Math.random() * 100,
             }))
 
         if (calendarData.length === 0) {

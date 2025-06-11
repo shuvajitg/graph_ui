@@ -1,12 +1,21 @@
 import { ResponsiveChord } from "@nivo/chord"
 
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
+
 interface NivoChordChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
 
-export function NivoChordChart({ data, xKey, yKey }: NivoChordChartProps) {
+export function NivoChordChart({ data, yKey }: NivoChordChartProps) {
     if (!data || data.length === 0) {
         return <div className="flex items-center justify-center h-full text-gray-500">No data available</div>
     }
@@ -28,7 +37,7 @@ export function NivoChordChart({ data, xKey, yKey }: NivoChordChartProps) {
                 return (
                     items.reduce((sum, item) => {
                         const value = item && typeof item[yKey || "sales"] === "number" ? item[yKey || "sales"] : 0
-                        return sum + value
+                        return sum + (typeof value === "number" ? value : Number(value) || 0)
                     }, 0) / 1000
                 )
             }),
@@ -65,10 +74,10 @@ export function NivoChordChart({ data, xKey, yKey }: NivoChordChartProps) {
                 }}
                 colors={{ scheme: "nivo" }}
                 isInteractive={true}
-                arcHoverOpacity={1}
-                arcHoverOthersOpacity={0.25}
-                ribbonHoverOpacity={0.75}
-                ribbonHoverOthersOpacity={0.25}
+            // arcHoverOpacity={1}
+            // arcHoverOthersOpacity={0.25}
+            // ribbonHoverOpacity={0.75}
+            // ribbonHoverOthersOpacity={0.25}
             />
         )
     } catch {

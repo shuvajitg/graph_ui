@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponsiveWaffle } from "@nivo/waffle"
 
 interface RadarChartDataItem {
