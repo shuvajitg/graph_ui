@@ -1,33 +1,202 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useState } from "react"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
-import { BarChart3, PieChart, LineChart, AreaChart, ScatterChart, TrendingUp } from "lucide-react"
+import {
+  BarChart3,
+  PieChart,
+  LineChart,
+  AreaChart,
+  ScatterChart,
+  TrendingUp,
+  Calendar,
+  GitBranch,
+  Circle,
+  Thermometer,
+  Network,
+  Zap,
+  Layers,
+  TreePine,
+  Grid3X3,
+  Hexagon,
+  Radar,
+} from "lucide-react"
 import { NivoBarChart } from "./components/nivo-bar-chart"
 import { NivoPieChart } from "./components/nivo-pie-chart"
 import { NivoLineChart } from "./components/nivo-line-chart"
 import { NivoAreaChart } from "./components/nivo-area-chart"
 import { NivoScatterChart } from "./components/nivo-scatter-chart"
+import { NivoCalendarChart } from "./components/nivo-calendar-chart"
+import { NivoChordChart } from "./components/nivo-chord-chart"
+import { NivoCirclePackingChart } from "./components/nivo-circle-packing-chart"
+import { NivoHeatMapChart } from "./components/nivo-heatmap-chart"
+import { NivoNetworkChart } from "./components/nivo-network-chart"
+import { NivoParallelCoordinatesChart } from "./components/nivo-parallel-coordinates-chart"
+import { NivoSwarmPlotChart } from "./components/nivo-swarm-plot-chart"
+import { NivoTreeChart } from "./components/nivo-tree-chart"
+import { NivoTreeMapChart } from "./components/nivo-treemap-chart"
+import { NivoWaffleChart } from "./components/nivo-waffle-chart"
+import { NivoRadarChart } from "./components/nivo-radar-chart"
 
-// Sample data - you can replace this with your actual data
+// Enhanced sample data with more variety
 const sampleData = [
-  { id: 1, category: "Electronics", sales: 12000, profit: 3000, month: "Jan", region: "North" },
-  { id: 2, category: "Clothing", sales: 8000, profit: 2000, month: "Jan", region: "South" },
-  { id: 3, category: "Books", sales: 5000, profit: 1500, month: "Jan", region: "East" },
-  { id: 4, category: "Electronics", sales: 15000, profit: 4000, month: "Feb", region: "North" },
-  { id: 5, category: "Clothing", sales: 9000, profit: 2500, month: "Feb", region: "South" },
-  { id: 6, category: "Books", sales: 5500, profit: 1800, month: "Feb", region: "East" },
-  { id: 7, category: "Electronics", sales: 18000, profit: 5000, month: "Mar", region: "North" },
-  { id: 8, category: "Clothing", sales: 11000, profit: 3000, month: "Mar", region: "South" },
-  { id: 9, category: "Books", sales: 6000, profit: 2000, month: "Mar", region: "East" },
+  {
+    id: 1,
+    category: "Electronics",
+    sales: 12000,
+    profit: 3000,
+    month: "Jan",
+    region: "North",
+    date: "2024-01-15",
+    value: 85,
+    performance: 92,
+  },
+  {
+    id: 2,
+    category: "Clothing",
+    sales: 8000,
+    profit: 2000,
+    month: "Jan",
+    region: "South",
+    date: "2024-01-20",
+    value: 65,
+    performance: 78,
+  },
+  {
+    id: 3,
+    category: "Books",
+    sales: 5000,
+    profit: 1500,
+    month: "Jan",
+    region: "East",
+    date: "2024-01-25",
+    value: 45,
+    performance: 65,
+  },
+  {
+    id: 4,
+    category: "Electronics",
+    sales: 15000,
+    profit: 4000,
+    month: "Feb",
+    region: "North",
+    date: "2024-02-15",
+    value: 95,
+    performance: 88,
+  },
+  {
+    id: 5,
+    category: "Clothing",
+    sales: 9000,
+    profit: 2500,
+    month: "Feb",
+    region: "South",
+    date: "2024-02-20",
+    value: 70,
+    performance: 82,
+  },
+  {
+    id: 6,
+    category: "Books",
+    sales: 5500,
+    profit: 1800,
+    month: "Feb",
+    region: "East",
+    date: "2024-02-25",
+    value: 50,
+    performance: 70,
+  },
+  {
+    id: 7,
+    category: "Electronics",
+    sales: 18000,
+    profit: 5000,
+    month: "Mar",
+    region: "North",
+    date: "2024-03-15",
+    value: 100,
+    performance: 95,
+  },
+  {
+    id: 8,
+    category: "Clothing",
+    sales: 11000,
+    profit: 3000,
+    month: "Mar",
+    region: "South",
+    date: "2024-03-20",
+    value: 80,
+    performance: 85,
+  },
+  {
+    id: 9,
+    category: "Books",
+    sales: 6000,
+    profit: 2000,
+    month: "Mar",
+    region: "East",
+    date: "2024-03-25",
+    value: 55,
+    performance: 75,
+  },
+  {
+    id: 10,
+    category: "Home",
+    sales: 7500,
+    profit: 2200,
+    month: "Jan",
+    region: "West",
+    date: "2024-01-30",
+    value: 60,
+    performance: 72,
+  },
+  {
+    id: 11,
+    category: "Home",
+    sales: 8200,
+    profit: 2400,
+    month: "Feb",
+    region: "West",
+    date: "2024-02-28",
+    value: 65,
+    performance: 76,
+  },
+  {
+    id: 12,
+    category: "Home",
+    sales: 9100,
+    profit: 2700,
+    month: "Mar",
+    region: "West",
+    date: "2024-03-30",
+    value: 72,
+    performance: 80,
+  },
 ]
 
-type ChartType = "bar" | "pie" | "line" | "area" | "scatter"
+type ChartType =
+  | "bar"
+  | "pie"
+  | "line"
+  | "area"
+  | "scatter"
+  | "calendar"
+  | "chord"
+  | "circle-packing"
+  | "heatmap"
+  | "network"
+  | "parallel-coordinates"
+  | "swarm-plot"
+  | "tree"
+  | "treemap"
+  | "waffle"
+  | "radar"
 
 const chartTypes = [
   { id: "bar", name: "Bar Chart", icon: BarChart3 },
@@ -35,16 +204,37 @@ const chartTypes = [
   { id: "line", name: "Line Chart", icon: LineChart },
   { id: "area", name: "Area Chart", icon: AreaChart },
   { id: "scatter", name: "Scatter Plot", icon: ScatterChart },
+  { id: "calendar", name: "Calendar", icon: Calendar },
+  { id: "chord", name: "Chord Diagram", icon: GitBranch },
+  { id: "circle-packing", name: "Circle Packing", icon: Circle },
+  { id: "heatmap", name: "Heat Map", icon: Thermometer },
+  { id: "network", name: "Network", icon: Network },
+  { id: "parallel-coordinates", name: "Parallel Coordinates", icon: Zap },
+  { id: "swarm-plot", name: "Swarm Plot", icon: Layers },
+  { id: "tree", name: "Tree", icon: TreePine },
+  { id: "treemap", name: "Tree Map", icon: Grid3X3 },
+  { id: "waffle", name: "Waffle Chart", icon: Hexagon },
+  { id: "radar", name: "Radar Chart", icon: Radar },
 ]
 
-export default function App() {
+export default function DataVisualizationDashboard() {
   const [selectedChartType, setSelectedChartType] = useState<ChartType>("bar")
   const [xAxis, setXAxis] = useState<string>("")
   const [yAxis, setYAxis] = useState<string>("")
   const [draggedColumn, setDraggedColumn] = useState<string>("")
 
-  // Get column names from the data
-  const columns = Object.keys(sampleData[0]).filter((key) => key !== "id")
+  // Get column names from the data with safety checks
+  const columns = React.useMemo(() => {
+    try {
+      if (!sampleData || sampleData.length === 0 || !sampleData[0]) {
+        return []
+      }
+      return Object.keys(sampleData[0]).filter((key) => key !== "id")
+    } catch (error) {
+      console.error("Error getting columns:", error)
+      return []
+    }
+  }, [])
 
   const handleDragStart = (column: string) => {
     setDraggedColumn(column)
@@ -71,45 +261,117 @@ export default function App() {
   }
 
   const renderChart = () => {
-    if (!xAxis || !yAxis) {
-      return (
-        <div className="flex items-center justify-center h-96 text-muted-foreground">
-          <div className="text-center">
-            <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Drag columns to X and Y axes to generate a chart</p>
+    try {
+      // Some charts don't require both X and Y axes
+      const chartsRequiringBothAxes = [
+        "bar",
+        "line",
+        "area",
+        "scatter",
+        "heatmap",
+        "parallel-coordinates",
+        "swarm-plot",
+      ]
+      const chartsRequiringOneAxis = ["pie", "treemap", "waffle", "calendar"]
+      const chartsRequiringNoAxes = ["chord", "circle-packing", "network", "tree", "radar"]
+
+      if (chartsRequiringBothAxes.includes(selectedChartType) && (!xAxis || !yAxis)) {
+        return (
+          <div className="flex items-center justify-center h-96 text-muted-foreground">
+            <div className="text-center">
+              <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Drag columns to X and Y axes to generate a chart</p>
+            </div>
           </div>
+        )
+      }
+
+      if (chartsRequiringOneAxis.includes(selectedChartType) && !xAxis && !yAxis) {
+        return (
+          <div className="flex items-center justify-center h-96 text-muted-foreground">
+            <div className="text-center">
+              <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Drag at least one column to an axis to generate a chart</p>
+            </div>
+          </div>
+        )
+      }
+
+      const chartProps = {
+        data: sampleData || [],
+        xKey: xAxis || "",
+        yKey: yAxis || "",
+      }
+
+      switch (selectedChartType) {
+        case "bar":
+          return <NivoBarChart {...chartProps} />
+        case "pie":
+          return <NivoPieChart {...chartProps} />
+        case "line":
+          return <NivoLineChart {...chartProps} />
+        case "area":
+          return <NivoAreaChart {...chartProps} />
+        case "scatter":
+          return <NivoScatterChart {...chartProps} />
+        case "calendar":
+          return <NivoCalendarChart {...chartProps} />
+        case "chord":
+          return <NivoChordChart {...chartProps} />
+        case "circle-packing":
+          return <NivoCirclePackingChart {...chartProps} />
+        case "heatmap":
+          return <NivoHeatMapChart {...chartProps} />
+        case "network":
+          return <NivoNetworkChart {...chartProps} />
+        case "parallel-coordinates":
+          return <NivoParallelCoordinatesChart {...chartProps} />
+        case "swarm-plot":
+          return <NivoSwarmPlotChart {...chartProps} />
+        case "tree":
+          return <NivoTreeChart {...chartProps} />
+        case "treemap":
+          return <NivoTreeMapChart {...chartProps} />
+        case "waffle":
+          return <NivoWaffleChart {...chartProps} />
+        case "radar":
+          return <NivoRadarChart {...chartProps} />
+        default:
+          return (
+            <div className="flex items-center justify-center h-96 text-muted-foreground">
+              <p>Chart type not supported</p>
+            </div>
+          )
+      }
+    } catch (error) {
+      console.error("Error rendering chart:", error)
+      return (
+        <div className="flex items-center justify-center h-96 text-red-500">
+          <p>Error rendering chart. Please try a different configuration.</p>
         </div>
       )
     }
+  }
 
-    const chartProps = {
-      data: sampleData,
-      xKey: xAxis,
-      yKey: yAxis,
-    }
-
-    switch (selectedChartType) {
-      case "bar":
-        return <NivoBarChart {...chartProps} />
-      case "pie":
-        return <NivoPieChart {...chartProps} />
-      case "line":
-        return <NivoLineChart {...chartProps} />
-      case "area":
-        return <NivoAreaChart {...chartProps} />
-      case "scatter":
-        return <NivoScatterChart {...chartProps} />
-      default:
-        return null
-    }
+  if (!sampleData || sampleData.length === 0) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">No Data Available</h1>
+          <p className="text-gray-600">Please ensure sample data is loaded correctly.</p>
+        </div>
+      </div>
+    )
   }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Data Visualization Dashboard</h1>
-          <p className="text-gray-600">Drag and drop columns to create interactive charts</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Advanced Data Visualization Dashboard</h1>
+          <p className="text-gray-600">
+            Drag and drop columns to create interactive charts with 16 different visualization types
+          </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -119,17 +381,21 @@ export default function App() {
               <CardTitle className="text-lg">Data Columns</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                {columns.map((column) => (
-                  <div
-                    key={column}
-                    draggable
-                    onDragStart={() => handleDragStart(column)}
-                    className="p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-move hover:bg-blue-100 transition-colors"
-                  >
-                    <span className="font-medium text-blue-800">{column}</span>
-                  </div>
-                ))}
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {columns && columns.length > 0 ? (
+                  columns.map((column) => (
+                    <div
+                      key={column}
+                      draggable
+                      onDragStart={() => handleDragStart(column)}
+                      className="p-3 bg-blue-50 border border-blue-200 rounded-lg cursor-move hover:bg-blue-100 transition-colors"
+                    >
+                      <span className="font-medium text-blue-800">{column}</span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-gray-500 text-sm">No columns available</div>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -197,62 +463,78 @@ export default function App() {
               <CardTitle className="text-lg">Chart Types</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                {chartTypes.map((chart) => {
-                  const Icon = chart.icon
-                  return (
-                    <Button
-                      key={chart.id}
-                      onClick={() => setSelectedChartType(chart.id as ChartType)}
-                      variant={selectedChartType === chart.id ? "default" : "outline"}
-                      className="w-full justify-start"
-                    >
-                      <Icon className="h-4 w-4 mr-2" />
-                      {chart.name}
-                    </Button>
-                  )
-                })}
+              <div className="space-y-2 max-h-96 overflow-y-auto">
+                {chartTypes && chartTypes.length > 0 ? (
+                  chartTypes.map((chart) => {
+                    const Icon = chart.icon
+                    return (
+                      <Button
+                        key={chart.id}
+                        onClick={() => setSelectedChartType(chart.id as ChartType)}
+                        variant={selectedChartType === chart.id ? "default" : "outline"}
+                        className="w-full justify-start text-sm"
+                        size="sm"
+                      >
+                        <Icon className="h-4 w-4 mr-2" />
+                        {chart.name}
+                      </Button>
+                    )
+                  })
+                ) : (
+                  <div className="text-gray-500 text-sm">No chart types available</div>
+                )}
               </div>
             </CardContent>
           </Card>
 
           {/* Data Preview */}
-          {/* <Card>
+          <Card>
             <CardHeader>
               <CardTitle className="text-lg">Data Preview</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="max-h-96 overflow-auto">
                 <div className="space-y-2">
-                  {sampleData.slice(0, 5).map((row, index) => (
-                    <div key={index} className="p-2 bg-gray-50 rounded text-xs">
-                      {Object.entries(row)
-                        .filter(([key]) => key !== "id")
-                        .map(([key, value]) => (
-                          <div key={key} className="flex justify-between">
-                            <span className="font-medium">{key}:</span>
-                            <span>{value}</span>
-                          </div>
-                        ))}
-                      <Separator className="my-1" />
-                    </div>
-                  ))}
-                  <p className="text-xs text-gray-500 text-center">Showing 5 of {sampleData.length} rows</p>
+                  {sampleData && sampleData.length > 0 ? (
+                    sampleData.slice(0,).map((row, index) => (
+                      <div key={index} className="p-2 bg-gray-50 rounded text-xs">
+                        {row &&
+                          Object.entries(row)
+                            .filter(([key]) => key !== "id")
+                            .slice(0,)
+                            .map(([key, value]) => (
+                              <div key={key} className="flex justify-between">
+                                <span className="font-medium">{key}:</span>
+                                <span>{value}</span>
+                              </div>
+                            ))}
+                        <Separator className="my-1" />
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-gray-500 text-sm">No data available</div>
+                  )}
+                  {sampleData && sampleData.length > 0 && (
+                    <p className="text-xs text-gray-500 text-center">Showing 3 of {sampleData.length} rows</p>
+                  )}
                 </div>
               </div>
             </CardContent>
-          </Card> */}
+          </Card>
         </div>
 
         {/* Chart Display */}
         <Card>
           <CardHeader>
             <CardTitle className="text-xl">
-              {selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1)} Chart
+              {selectedChartType.charAt(0).toUpperCase() + selectedChartType.slice(1).replace("-", " ")} Chart
               {xAxis && yAxis && (
                 <span className="text-sm font-normal text-gray-600 ml-2">
                   ({xAxis} vs {yAxis})
                 </span>
+              )}
+              {(xAxis || yAxis) && !(xAxis && yAxis) && (
+                <span className="text-sm font-normal text-gray-600 ml-2">({xAxis || yAxis})</span>
               )}
             </CardTitle>
           </CardHeader>
