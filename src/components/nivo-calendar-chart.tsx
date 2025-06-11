@@ -1,7 +1,16 @@
-import { ResponsiveCalendar } from "@nivo/calendar"
+import { ResponsiveCalendar, } from "@nivo/calendar"
+
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
 
 interface NivoCalendarChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
@@ -50,7 +59,7 @@ export function NivoCalendarChart({ data, xKey, yKey }: NivoCalendarChartProps) 
                 ]}
             />
         )
-    } catch (error) {
+    } catch {
         return <div className="flex items-center justify-center h-full text-red-500">Error rendering calendar chart</div>
     }
 }

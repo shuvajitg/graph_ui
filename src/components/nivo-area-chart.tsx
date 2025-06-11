@@ -1,7 +1,15 @@
 import { ResponsiveLine } from "@nivo/line"
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
 
 interface NivoAreaChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
@@ -13,25 +21,28 @@ export function NivoAreaChart({ data, xKey, yKey }: NivoAreaChartProps) {
     }
 
     // Transform data for area chart
-    const groupedData = data.reduce((acc: any, item) => {
-        const seriesKey = item.category || "Series 1"
-        if (!acc[seriesKey]) {
-            acc[seriesKey] = []
-        }
-        acc[seriesKey].push({
-            x: item[xKey],
-            y: typeof item[yKey] === "number" ? item[yKey] : 0,
-        })
-        return acc
-    }, {})
+    const groupedData = data.reduce(
+        (acc: Record<string, { x: string | number; y: number }[]>, item) => {
+            const seriesKey = item.category || "Series 1"
+            if (!acc[seriesKey]) {
+                acc[seriesKey] = []
+            }
+            acc[seriesKey].push({
+                x: item[xKey] ?? "",
+                y: typeof item[yKey] === "number" ? item[yKey] : 0,
+            })
+            return acc
+        },
+        {}
+    )
 
     const transformedData = Object.keys(groupedData).map((key) => ({
         id: key,
-        data: groupedData[key].sort((a: any, b: any) => {
+        data: groupedData[key].sort((a: { x: string | number; y: number }, b: { x: string | number; y: number }) => {
             if (typeof a.x === "string" && typeof b.x === "string") {
                 return a.x.localeCompare(b.x)
             }
-            return a.x - b.x
+            return (a.x as number) - (b.x as number)
         }),
     }))
 

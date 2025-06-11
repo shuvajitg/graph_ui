@@ -1,7 +1,16 @@
 import { ResponsiveBar } from "@nivo/bar"
 
+interface RadarChartDataItem {
+    category: string
+    sales?: number
+    profit?: number
+    value?: number
+    performance?: number
+    [key: string]: string | number | undefined
+}
+
 interface NivoBarChartProps {
-    data: any[]
+    data: RadarChartDataItem[]
     xKey: string
     yKey: string
 }
