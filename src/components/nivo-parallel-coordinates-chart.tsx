@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ResponsiveParallelCoordinates } from "@nivo/parallel-coordinates"
 interface RadarChartDataItem {
     category: string
